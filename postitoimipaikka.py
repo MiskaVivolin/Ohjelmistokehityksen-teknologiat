@@ -1,12 +1,18 @@
+import http_pyynto
 
-import urllib.request 
-import json
 
-with urllib.request.urlopen('https://raw.githubusercontent.com/theikkila/postinumerot/master/postcode_map_light.json') as response:
-    data = response.read()
+def etsi_toimipaikka(postinumero):
+    postinumerot = http_pyynto.hae_postinumerot()
 
-postidata = json.loads(data)
+    if postinumero in postinumerot:
+        return postinumerot[postinumero]
+    else:
+        return 'Tuntematon'
 
-nimi = input("Kirjoita postitoimipaikka: ")
+def main():
+    numero = input('Kirjoita postinumero: ')
 
-print(postidata[nimi])
+    print(etsi_toimipaikka(numero))
+
+if __name__ == '__main__':
+    main()

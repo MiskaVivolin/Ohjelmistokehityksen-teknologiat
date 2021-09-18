@@ -1,13 +1,29 @@
-import urllib.request 
-import json
+import http_pyynto
 
-with urllib.request.urlopen('https://raw.githubusercontent.com/theikkila/postinumerot/master/postcode_map_light.json') as response:
-    data = response.read()
 
-postidata = json.loads(data)
+def ryhmittele_toimipaikoittain(numero_sanakirja):
 
-kaupunki = input("Kirjoita postitoimipaikka: ")
+    paikat = {}
+    for postinumero, nimi in numero_sanakirja.items():
+        if nimi not in paikat:
+            paikat[nimi] = []
+        paikat[nimi].append(postinumero)
 
-for nimi, luku in postidata.items():
-    if postidata[nimi] == kaupunki:
-        print(f'{nimi} ({luku})')
+    return paikat
+
+
+def main():
+
+    toimipaikka = input('Kirjoita postitoimipaikka: ').strip().upper()
+
+    postinumerot = http_pyynto.hae_postinumerot()
+
+    paikkakunnat = ryhmittele_toimipaikoittain(postinumerot)
+
+    to_string = (", ".join(paikkakunnat[toimipaikka]))
+    
+    print(to_string)
+
+
+if __name__ == '__main__':
+    main()
